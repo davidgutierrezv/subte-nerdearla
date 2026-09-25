@@ -5,7 +5,7 @@
 <h3 align="center">Subtítulos en vivo y traducción EN↔ES para conferencias con muchas salas en paralelo.</h3>
 
 <p align="center">
-  <a href="https://subte-nerdearla.vercel.app">Demo</a> · <a href="#probalo-en-5-minutos">Probalo en 5 minutos</a> · <a href="docs/DEPLOY.md">Despliega el tuyo</a> · <a href="docs/ARCHITECTURE.md">Arquitectura</a>
+  <a href="https://subte-nerdearla.vercel.app">Demo</a> · <a href="#probalo-en-5-minutos">Probalo en 5 minutos</a> · <a href="#demo-en-capturas">Capturas</a> · <a href="docs/DEPLOY.md">Despliega el tuyo</a> · <a href="docs/ARCHITECTURE.md">Arquitectura</a>
 </p>
 
 <p align="center">
@@ -23,6 +23,7 @@
 - [El problema](#el-problema)
 - [La solución](#la-solución)
 - [Probalo en 5 minutos](#probalo-en-5-minutos)
+- [Demo en capturas](#demo-en-capturas)
 - [Funcionalidades](#funcionalidades)
 - [Cómo funciona](#cómo-funciona)
 - [Modelo de datos](#modelo-de-datos)
@@ -64,6 +65,62 @@ No hace falta micrófono: la estación de sala trae una **simulación** con dos 
 7. Al terminar, **Finalizar** cierra la charla y genera el **recap** automáticamente; la vista del público pasa a mostrar _Recap_ y _Transcripción_. **Reiniciar** borra la transcripción para volver a empezar.
 
 **Atajo para la demo:** en `/admin`, el panel **Modo demo: todas las salas en vivo** pone una charla por sala a transmitir la simulación al mismo tiempo, así la agenda se ve con varias líneas en vivo. **Detener demo** corta la simulación.
+
+## Demo en capturas
+
+No hay video, así que este es el recorrido completo en capturas. Están tomadas con un navegador headless sobre la app real en modo oscuro; las de celular miden 402 px de ancho. Todas están en [`docs/screenshots/`](docs/screenshots).
+
+### 1. Agenda: el mapa de la red
+
+Cada sala es una línea con su color y su letra. Cada tarjeta muestra la charla actual, el estado (_En vivo_, _Próxima_, _Finalizada_), el idioma del orador y el selector **Leer en**.
+
+<p align="center">
+  <img src="docs/screenshots/01-agenda-desktop.png" alt="Agenda en escritorio con tres salas: Lovelace, Principal y Turing" width="720" />
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/02-agenda-mobile.png" alt="Agenda en celular" width="280" />
+</p>
+
+### 2. Vista del público antes de empezar
+
+Si la charla todavía no arrancó, la vista lo avisa. Los subtítulos aparecen solos cuando la sala empieza a transmitir, sin recargar la página.
+
+<p align="center">
+  <img src="docs/screenshots/07-viewer-waiting.png" alt="Vista del público esperando al orador" width="280" />
+</p>
+
+### 3. Subtítulos en vivo con traducción
+
+Con la charla _En vivo_, cada frase es una estación del recorrido. Primero aparece en el idioma original y, uno o dos segundos después, su traducción; mientras tanto la estación muestra _Traduciendo…_. El selector **ES / EN** cambia el idioma al instante. La barra inferior ajusta el tamaño de letra, el contraste y la pantalla completa.
+
+<p align="center">
+  <img src="docs/screenshots/03-viewer-live.png" alt="Subtítulos en vivo de la charla IA en producción, en inglés" width="280" />
+</p>
+
+### 4. Recap con IA al finalizar
+
+Cuando termina la charla, la vista cambia a **Recap** y **Transcripción**. El recap trae el resumen, las ideas principales y los capítulos navegables, en los dos idiomas. **Descargar .md** exporta el recap y la transcripción en Markdown.
+
+<p align="center">
+  <img src="docs/screenshots/04-recap.png" alt="Recap generado con IA de la charla de accesibilidad web" width="280" />
+</p>
+
+### 5. Búsqueda en la transcripción
+
+La pestaña **Transcripción** tiene un buscador que resalta las coincidencias y muestra la marca de tiempo de cada frase.
+
+<p align="center">
+  <img src="docs/screenshots/05-transcript-search.png" alt="Búsqueda de ARIA en la transcripción con coincidencias resaltadas" width="280" />
+</p>
+
+### 6. Acceso de operadores
+
+`/admin` y `/stage/[slug]` piden la clave de operador. Adentro están el alta de salas y sesiones, el **Modo demo** y la estación de sala con _Micrófono_ o _Simulación_, _Transmitir_, _Finalizar_ y _Generar recap_. Esas pantallas no están capturadas porque la clave no se expone al navegador headless; para verlas, seguí [Probalo en 5 minutos](#probalo-en-5-minutos).
+
+<p align="center">
+  <img src="docs/screenshots/06-operator-login.png" alt="Pantalla de acceso de operadores" width="280" />
+</p>
 
 ## Funcionalidades
 
