@@ -1,47 +1,38 @@
-export default function Page() {
+import { getAgenda } from '@/lib/agenda'
+import { t } from '@/lib/i18n'
+import { StageCard } from '@/components/agenda/stage-card'
+import { SiteHeader } from '@/components/site-header'
+
+export const dynamic = 'force-dynamic'
+
+export default async function AgendaPage() {
+  const stages = await getAgenda()
+  const liveCount = stages.filter((s) => s.current?.status === 'live').length
+
   return (
-    <main
-      style={{
-        colorScheme: 'light dark',
-        position: 'relative',
-        display: 'flex',
-        minHeight: '100vh',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'light-dark(#fff, #000)',
-        color: 'light-dark(#000, #fff)',
-      }}
-    >
-      <svg
-        aria-hidden="true"
-        style={{ width: 80, height: 80 }}
-        width={80}
-        height={80}
-        fill="none"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        stroke="currentColor"
-        strokeWidth="0.5"
-      >
-        <path
-          d="M14.2 14.2H17V6.9375C17 4.76288 15.2371 3 13.0625 3H5.8V5.8M14.2 14.2V7.79063L7.79062 14.2H14.2ZM14.2 14.2V17H6.9375C4.76288 17 3 15.2371 3 13.0625V5.8H5.8M5.8 5.8V12.2313L12.2313 5.8H5.8Z"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <p
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: 'calc(50% + 56px)',
-          transform: 'translateX(-50%)',
-          whiteSpace: 'nowrap',
-          fontSize: '14px',
-          fontWeight: 500,
-          color: 'light-dark(#71717a, #a1a1aa)',
-        }}
-      >
-        Your v0 generation will show here.
-      </p>
-    </main>
+    <div className="flex min-h-dvh flex-col">
+      <SiteHeader liveCount={liveCount} />
+      <main className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 pb-16 pt-8 md:px-6">
+        <section className="flex flex-col gap-3">
+          <p className="font-mono text-xs uppercase tracking-widest text-primary">{t.agenda.eyebrow}</p>
+          <h1 className="text-balance text-3xl font-semibold leading-tight md:text-4xl">
+            {t.agenda.title}
+          </h1>
+          <p className="max-w-prose text-pretty leading-relaxed text-muted-foreground">
+            {t.agenda.subtitle}
+          </p>
+        </section>
+
+        {stages.length === 0 ? (
+          <p className="text-muted-foreground">{t.agenda.empty}</p>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {stages.map((stage) => (
+              <StageCard key={stage.id} stage={stage} />
+            ))}
+          </div>
+        )}
+      </main>
+    </div>
   )
 }
