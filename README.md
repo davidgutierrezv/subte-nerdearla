@@ -315,7 +315,7 @@ Valores de referencia; verificá los precios vigentes de cada proveedor.
 ## Limitaciones conocidas
 
 - La Web Speech API no está disponible en Firefox y su precisión depende del navegador y del ruido de la sala. Por eso Deepgram es el próximo paso.
-- La pantalla del celular de la estación debe quedar encendida mientras transmite.
+- La estación pide mantener la pantalla encendida (Wake Lock) y la vuelve a pedir al regresar a la pestaña. En navegadores sin soporte, la pantalla del celular debe quedar encendida a mano.
 - No hay separación por orador ni edición manual de subtítulos.
 - Solo inglés y español.
 
