@@ -64,12 +64,27 @@ async function AdminDashboard() {
   const stages = await getAgenda()
 
   return (
+    <div className="flex flex-col gap-8">
+      <section aria-labelledby="try-heading" className="rounded-lg bg-card p-4 ring-1 ring-border">
+        <h2 id="try-heading" className="font-display text-sm font-semibold">
+          {t.admin.tryTitle}
+        </h2>
+        <ol className="mt-3 flex flex-col gap-2 text-sm leading-relaxed text-muted-foreground">
+          {[t.admin.tryStep1, t.admin.tryStep2, t.admin.tryStep3].map((step, i) => (
+            <li key={step} className="flex gap-3">
+              <span className="font-display font-semibold text-foreground">{i + 1}.</span>
+              <span>{step}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
     <div className="grid gap-8 lg:grid-cols-[minmax(0,22rem)_1fr]">
       <div className="flex flex-col gap-4">
         <SessionForm stages={stages.map(({ id, name }) => ({ id, name }))} />
         <StageForm />
       </div>
       <SessionList stages={stages} />
+    </div>
     </div>
   )
 }

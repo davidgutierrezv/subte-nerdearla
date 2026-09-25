@@ -36,22 +36,27 @@ export const StatusEventSchema = z.object({
   status: z.enum(['live', 'paused', 'ended']),
 })
 
+// Texto provisorio: se reemplaza en cada evento y desaparece al llegar el segmento final.
+export const InterimEventSchema = z.object({
+  type: z.literal('interim'),
+  lang: LangSchema,
+  text: z.string().max(2000),
+  tStartMs: msSchema,
+})
+export type InterimEvent = z.infer<typeof InterimEventSchema>
+
+// El operador borró la transcripción (pruebas).
+export const ResetEventSchema = z.object({ type: z.literal('reset') })
+
 export const LiveEventSchema = z.discriminatedUnion('type', [
   SegmentEventSchema,
   TranslationEventSchema,
   InsightEventSchema,
   StatusEventSchema,
+  InterimEventSchema,
+  ResetEventSchema,
 ])
 export type LiveEvent = z.infer<typeof LiveEventSchema>
-
-// Canal live:{sessionId}:interim
-export const InterimEventSchema = z.object({
-  type: z.literal('interim'),
-  lang: LangSchema,
-  text: z.string(),
-  tStartMs: msSchema,
-})
-export type InterimEvent = z.infer<typeof InterimEventSchema>
 
 // POST /api/segments (header: x-operator-key)
 export const SegmentInSchema = z
