@@ -56,7 +56,11 @@ El público no instala nada: abre la web en el celular, elige la charla y el idi
 
 No hace falta micrófono: la estación de sala trae una **simulación** con dos charlas de ejemplo (una en inglés y otra en español) que recorren todo el pipeline real, incluida la traducción.
 
-1. Entrá a **`/admin`** e ingresá la clave de operador (`OPERATOR_KEY`).
+> **Clave de operador para revisores:** `subte-nerdearla-7Kq29xLm4Vp8`
+>
+> Es una clave temporal para evaluar la demo en [subte-nerdearla.vercel.app](https://subte-nerdearla.vercel.app) y se va a rotar después de la revisión.
+
+1. Entrá a **`/admin`** e ingresá la clave de operador de arriba.
 2. En el listado de sesiones, tocá **Estación** en cualquier charla (por ejemplo _IA en producción_). Se abre `/stage/[slug]`.
 3. Dejá la fuente en **Simulación** y tocá **Transmitir**. La sesión pasa a _En vivo_ y la agenda la marca como tal.
 4. Tocá **Abrir vista del público** (o copiá el enlace y abrilo en otro celular).
@@ -116,7 +120,7 @@ La pestaña **Transcripción** tiene un buscador que resalta las coincidencias y
 
 ### 6. Acceso de operadores
 
-`/admin` y `/stage/[slug]` piden la clave de operador. Adentro están el alta de salas y sesiones, el **Modo demo** y la estación de sala con _Micrófono_ o _Simulación_, _Transmitir_, _Finalizar_ y _Generar recap_. Esas pantallas no están capturadas porque la clave no se expone al navegador headless; para verlas, seguí [Probalo en 5 minutos](#probalo-en-5-minutos).
+`/admin` y `/stage/[slug]` piden la clave de operador. Adentro están el alta de salas y sesiones, el **Modo demo** y la estación de sala con _Micrófono_ o _Simulación_, _Transmitir_, _Finalizar_ y _Generar recap_. Esas pantallas no están capturadas porque la clave no se expone al navegador headless; para verlas, usá la clave para revisores de [Probalo en 5 minutos](#probalo-en-5-minutos).
 
 <p align="center">
   <img src="docs/screenshots/06-operator-login.png" alt="Pantalla de acceso de operadores" width="280" />
