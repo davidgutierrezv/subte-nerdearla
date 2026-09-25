@@ -5,8 +5,12 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: 'IBM Plex Sans', 'IBM Plex Sans Fallback', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', 'IBM Plex Mono Fallback', ui-monospace, monospace;
+  --font-sans: 'Atkinson Hyperlegible', 'Atkinson Hyperlegible Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Space Grotesk Fallback', ui-sans-serif, system-ui, sans-serif;
+  --color-line-a: var(--line-a);
+  --color-line-b: var(--line-b);
+  --color-line-c: var(--line-c);
+  --color-line-d: var(--line-d);
   --color-live: var(--live);
   --color-live-foreground: var(--live-foreground);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -49,44 +53,48 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Single dark palette: charcoal stage, off-white text, classic caption yellow. */
+/* Subte: near-black "screen", white type, one saturated color per line (sala). */
 :root,
 .dark {
   color-scheme: dark;
-  --background: oklch(0.17 0.006 260);
-  --foreground: oklch(0.94 0.008 85);
-  --card: oklch(0.21 0.007 260);
-  --card-foreground: oklch(0.94 0.008 85);
-  --popover: oklch(0.21 0.007 260);
-  --popover-foreground: oklch(0.94 0.008 85);
-  --primary: oklch(0.86 0.16 88);
-  --primary-foreground: oklch(0.17 0.006 260);
-  --secondary: oklch(0.26 0.008 260);
-  --secondary-foreground: oklch(0.94 0.008 85);
-  --muted: oklch(0.26 0.008 260);
-  --muted-foreground: oklch(0.7 0.01 260);
-  --accent: oklch(0.26 0.008 260);
-  --accent-foreground: oklch(0.94 0.008 85);
-  --destructive: oklch(0.68 0.19 25);
-  --live: oklch(0.86 0.16 88);
-  --live-foreground: oklch(0.17 0.006 260);
-  --border: oklch(0.94 0.008 85 / 10%);
-  --input: oklch(0.94 0.008 85 / 16%);
-  --ring: oklch(0.86 0.16 88 / 70%);
-  --chart-1: oklch(0.86 0.16 88);
-  --chart-2: oklch(0.7 0.01 260);
-  --chart-3: oklch(0.55 0.01 260);
-  --chart-4: oklch(0.4 0.01 260);
-  --chart-5: oklch(0.3 0.01 260);
-  --radius: 0.5rem;
-  --sidebar: oklch(0.21 0.007 260);
-  --sidebar-foreground: oklch(0.94 0.008 85);
-  --sidebar-primary: oklch(0.86 0.16 88);
-  --sidebar-primary-foreground: oklch(0.17 0.006 260);
-  --sidebar-accent: oklch(0.26 0.008 260);
-  --sidebar-accent-foreground: oklch(0.94 0.008 85);
-  --sidebar-border: oklch(0.94 0.008 85 / 10%);
-  --sidebar-ring: oklch(0.86 0.16 88 / 70%);
+  --background: #0b0b0d;
+  --foreground: #ffffff;
+  --card: #151518;
+  --card-foreground: #ffffff;
+  --popover: #151518;
+  --popover-foreground: #ffffff;
+  --primary: #ffc72c;
+  --primary-foreground: #0b0b0d;
+  --secondary: #1f1f23;
+  --secondary-foreground: #ffffff;
+  --muted: #1f1f23;
+  --muted-foreground: #a1a1aa;
+  --accent: #1f1f23;
+  --accent-foreground: #ffffff;
+  --destructive: #ff3b3f;
+  --line-a: #ffc72c;
+  --line-b: #0a84ff;
+  --line-c: #ff3b3f;
+  --line-d: #00b85c;
+  --live: #ff3b3f;
+  --live-foreground: #ffffff;
+  --border: rgb(255 255 255 / 10%);
+  --input: rgb(255 255 255 / 16%);
+  --ring: rgb(255 199 44 / 70%);
+  --chart-1: #ffc72c;
+  --chart-2: #0a84ff;
+  --chart-3: #ff3b3f;
+  --chart-4: #00b85c;
+  --chart-5: #a1a1aa;
+  --radius: 0.75rem;
+  --sidebar: #151518;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ffc72c;
+  --sidebar-primary-foreground: #0b0b0d;
+  --sidebar-accent: #1f1f23;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 10%);
+  --sidebar-ring: rgb(255 199 44 / 70%);
 }
 
 @layer base {

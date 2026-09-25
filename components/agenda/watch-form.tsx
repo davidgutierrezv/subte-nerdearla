@@ -10,7 +10,7 @@ export function WatchForm({ session }: { session: SessionRow }) {
   return (
     <form action={`/s/${session.slug}`} method="get" className="flex flex-col gap-3">
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-2 font-mono text-xs uppercase tracking-wider text-muted-foreground">
+        <legend className="mb-2 font-display text-xs uppercase tracking-wider text-muted-foreground">
           {t.agenda.readIn}
         </legend>
         <div className="grid grid-cols-2 gap-1 rounded-md bg-secondary p-1">

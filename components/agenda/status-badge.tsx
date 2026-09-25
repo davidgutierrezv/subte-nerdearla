@@ -6,7 +6,7 @@ export function StatusBadge({ status, className }: { status: SessionStatus; clas
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-sm px-2 py-0.5 font-mono text-xs font-medium uppercase tracking-wider',
+        'inline-flex items-center gap-1.5 rounded-sm px-2 py-0.5 font-display text-xs font-medium uppercase tracking-wider',
         status === 'live' && 'bg-live text-live-foreground',
         status === 'scheduled' && 'bg-secondary text-foreground',
         status === 'ended' && 'text-muted-foreground ring-1 ring-border',

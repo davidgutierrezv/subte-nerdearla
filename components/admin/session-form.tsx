@@ -62,7 +62,7 @@ export function SessionForm({ stages }: { stages: StageRow[] }) {
           spellCheck={false}
           aria-invalid={Boolean(errors.slug?.length)}
           aria-describedby={errors.slug?.length ? 'session-slug-error' : 'session-slug-hint'}
-          className={`${inputClass} font-mono`}
+          className={`${inputClass} font-display`}
         />
       </Field>
 

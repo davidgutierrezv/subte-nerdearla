@@ -14,7 +14,7 @@ export function SessionList({ stages }: { stages: StageWithSessions[] }) {
           const sessions = [stage.current, ...stage.others].filter((s) => s !== null)
           return (
             <div key={stage.id} className="rounded-lg bg-card p-4 ring-1 ring-border">
-              <h3 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+              <h3 className="font-display text-xs uppercase tracking-widest text-muted-foreground">
                 {stage.name}
               </h3>
               {sessions.length === 0 ? (
@@ -25,7 +25,7 @@ export function SessionList({ stages }: { stages: StageWithSessions[] }) {
                     <li key={s.id} className="flex items-center justify-between gap-3 py-3">
                       <div className="flex min-w-0 flex-col gap-0.5">
                         <span className="truncate text-sm font-medium">{s.title}</span>
-                        <span className="truncate font-mono text-xs text-muted-foreground">
+                        <span className="truncate font-display text-xs text-muted-foreground">
                           /s/{s.slug} · {s.source_lang.toUpperCase()}
                         </span>
                       </div>
