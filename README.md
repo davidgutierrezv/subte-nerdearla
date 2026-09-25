@@ -16,7 +16,7 @@
   <img alt="Vibeathon Nerdearla 2026" src="https://img.shields.io/badge/hecho%20para-Vibeathon%20Nerdearla%202026-FD3639">
 </p>
 
-> **Estado del proyecto:** MVP funcional. Ya se puede transmitir una charla desde el celular de la sala (con micrófono o con una simulación) y el público la sigue en vivo, traducida, desde su celular. Recap, notas y Deepgram están en el [Roadmap](#roadmap).
+> **Estado del proyecto:** MVP funcional. Ya se puede transmitir una charla desde el celular de la sala (con micrófono o con una simulación) y el público la sigue en vivo, traducida, desde su celular. Al terminar, la IA genera un **recap** con resumen, ideas principales y capítulos navegables. Notas personales y Deepgram están en el [Roadmap](#roadmap).
 
 ## Índice
 
@@ -61,7 +61,9 @@ No hace falta micrófono: la estación de sala trae una **simulación** con dos 
 4. Tocá **Abrir vista del público** (o copiá el enlace y abrilo en otro celular).
 5. En la vista del público vas a ver aparecer cada frase en el idioma original y, uno o dos segundos después, su traducción. Cambiá el idioma con el selector **ES / EN**.
 6. Para probar con voz real, elegí **Micrófono** en la estación (Chrome, Edge o Safari) y hablá.
-7. Al terminar, **Finalizar** cierra la charla; **Reiniciar** borra la transcripción para volver a empezar.
+7. Al terminar, **Finalizar** cierra la charla y genera el **recap** automáticamente; la vista del público pasa a mostrar _Recap_ y _Transcripción_. **Reiniciar** borra la transcripción para volver a empezar.
+
+**Atajo para la demo:** en `/admin`, el panel **Modo demo: todas las salas en vivo** pone una charla por sala a transmitir la simulación al mismo tiempo, así la agenda se ve con varias líneas en vivo. **Detener demo** corta la simulación.
 
 ## Funcionalidades
 
@@ -82,12 +84,21 @@ No hace falta micrófono: la estación de sala trae una **simulación** con dos 
 - Si una traducción falla, la frase queda marcada como **Solo original** en lugar de quedarse cargando.
 - Anuncios para lectores de pantalla (`aria-live`) con cada frase nueva.
 
+### Recap con IA — `/s/[slug]` al finalizar
+
+- Se genera **automáticamente al finalizar** la charla, en español y en inglés.
+- **Resumen** breve, **ideas principales** y **capítulos ("estaciones")** con su hora de inicio; tocar un capítulo salta a ese momento de la transcripción.
+- **Buscador** en la transcripción, con resaltado de coincidencias.
+- **Descarga en Markdown** del recap y la transcripción completa.
+- Mientras se genera, la vista muestra un estado de espera y se actualiza sola cuando está listo.
+
 ### Estación de sala — `/stage/[slug]` (solo operadores)
 
 - **Dos fuentes**: _Simulación_ (guion de ejemplo según el idioma de la charla) o _Micrófono_ (Web Speech API del navegador, `es-AR` / `en-US`).
 - **Transmitir, Pausar, Finalizar y Reiniciar**, con confirmación en las acciones destructivas.
 - Reloj de la charla, frases enviadas, frases fallidas y **latencia** de la última frase (guardado + traducción).
-- Lista de las últimas frases enviadas y los idiomas a los que se tradujeron.
+- Lista de las últimas frases enviadas y los idiomas a los que se tradujeron; las que quedaron sin traducción se marcan.
+- Botón **Generar recap** para rehacerlo después de finalizar.
 - Enlace para abrir o copiar la vista del público.
 - Reinicio automático del reconocimiento de voz cuando el navegador lo corta, y avisos claros si falta permiso de micrófono o el navegador no lo soporta.
 
@@ -96,10 +107,11 @@ No hace falta micrófono: la estación de sala trae una **simulación** con dos 
 - Acceso con una clave compartida (`OPERATOR_KEY`), guardada en una cookie `httpOnly`.
 - Alta de salas y de sesiones: slug, título, orador, sala, idioma original y **glosario** (términos que la traducción debe respetar, como `Kubernetes` o `RAG`).
 - Listado de sesiones con acceso directo a la **Estación** y a la **Vista del público**.
+- **Modo demo**: todas las salas en vivo con la simulación, con un clic.
 
 ### Traducción
 
-- Traducción frase por frase con **AI SDK** a través de **Vercel AI Gateway** (modelo `google/gemini-3.5-flash-lite`).
+- Traducción frase por frase con **AI SDK** a través de **Vercel AI Gateway** (modelo `google/gemini-2.5-flash-lite`, el mismo que genera el recap; se configura en `lib/live/gateway.ts`).
 - Usa las **dos frases anteriores como contexto** para que la traducción sea coherente, sin volver a traducirlas.
 - Respeta el **glosario** de la sesión, nombres de productos, siglas y código.
 - Español **rioplatense** como variante de destino.
@@ -155,7 +167,7 @@ Supabase Postgres, con Row Level Security en todas las tablas. Scripts en `scrip
 | `sessions` | Charlas: slug, título, orador, sala, idioma original, idiomas destino, glosario, estado, horarios | Lectura |
 | `segments` | Frases confirmadas: `seq`, idioma, texto, `t_start_ms`, `t_end_ms` | Lectura |
 | `translations` | Traducción de cada segmento por idioma | Lectura |
-| `session_insights` | Resúmenes y capítulos _(planificado)_ | Lectura |
+| `session_insights` | Recap por idioma: resumen, ideas principales y capítulos | Lectura |
 | `notes` | Notas y marcadores personales _(planificado)_ | Solo las propias |
 | `logs` | Eventos y errores del servidor | Ninguno |
 
@@ -166,6 +178,7 @@ Todas las escrituras de segmentos, traducciones y estados pasan por el servidor 
 | Método | Ruta | Auth | Descripción |
 |---|---|---|---|
 | `GET` | `/api/sessions/[slug]/transcript` | Pública | Estado de la charla y transcripción completa con traducciones. Sin caché. |
+| `GET` | `/api/sessions/[slug]/recap` | Pública | Recap de la charla por idioma (resumen, ideas principales, capítulos). Sin caché. |
 | `POST` | `/api/segments` | Header `x-operator-key` o cookie de operador | Ingesta de una frase desde estaciones externas (scripts, hardware). |
 
 Ejemplo de ingesta externa:
@@ -191,7 +204,7 @@ Respuestas de error: `400 invalid_input`, `401 unauthorized`, `404 not_found`, `
 
 - **Next.js 16** (App Router, Server Actions, React 19) + **TypeScript**, desplegado en **Vercel**.
 - **Supabase**: Postgres con RLS y **Realtime Broadcast**.
-- **AI SDK 7** + **Vercel AI Gateway** para la traducción.
+- **AI SDK 7** + **Vercel AI Gateway** para la traducción y el recap.
 - **Web Speech API** del navegador para la transcripción en el MVP (Deepgram Nova-3 planificado).
 - **SWR** para la carga inicial y la resincronización de la transcripción.
 - **Tailwind CSS v4** + **shadcn/ui**, **zod** para validación, **lucide-react** para íconos.
@@ -234,20 +247,25 @@ app/
   admin/                            Panel de operadores: página y Server Actions
   s/[slug]/page.tsx                 Vista del público
   stage/[slug]/page.tsx             Estación de sala
-  stage/actions.ts                  Server Actions: iniciar, finalizar, reiniciar, enviar frases
+  stage/actions.ts                  Server Actions: iniciar, finalizar, reiniciar, enviar frases, recap, modo demo
   api/segments/route.ts             Ingesta externa de frases
   api/sessions/[slug]/transcript/   Transcripción completa de una charla
+  api/sessions/[slug]/recap/        Recap de una charla
 components/
-  admin/                            Formularios y listado del panel
+  admin/                            Formularios, listado y modo demo del panel
   agenda/                           Tarjeta de sala, badge de estado, selector de idioma
-  viewer/                           Vista del público: rail de subtítulos, cabecera, barra de ajustes
+  viewer/                           Vista del público: subtítulos, recap, buscador, cabecera, ajustes
   stage/station.tsx                 Estación de sala
   brand/                            Marca de Subte en SVG
   ui/                               Componentes de shadcn/ui
 lib/
   live/
     ingest.ts                       Guardar, difundir y traducir una frase
+    gateway.ts                      Cliente de AI Gateway y modelo compartido
     translate.ts                    Traducción con AI SDK + AI Gateway
+    recap.ts                        Generación del recap (resumen, ideas, capítulos)
+    recap-read.ts                   Lectura del recap guardado
+    export.ts                       Exportación a Markdown
     broadcast.ts                    Publicación en Supabase Realtime desde el servidor
     transcript.ts                   Carga de la transcripción completa
     shared.ts                       Tipos y utilidades compartidas cliente/servidor
@@ -306,8 +324,7 @@ Valores de referencia; verificá los precios vigentes de cada proveedor.
 Planificado y **todavía no implementado**:
 
 - Transcripción con Deepgram Nova-3 (token temporal, `KeepAlive`, reconexión con backoff).
-- Recap: resumen, ideas principales, capítulos ("estaciones") y buscador en la transcripción.
-- Notas y marcadores personales con login anónimo, exportables a Markdown.
+- Notas y marcadores personales con login anónimo, visibles en el recap y exportables a Markdown.
 - Modo replay para demos y charlas grabadas.
 - Proveedores intercambiables (`SttProvider`, `LlmProvider`), incluidos modelos abiertos o locales (Whisper, Ollama).
 - Ingesta RTMP/SRT sin navegador (worker Node).

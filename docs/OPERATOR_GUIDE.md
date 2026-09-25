@@ -39,4 +39,4 @@ Esta guía es para las personas voluntarias que operan una sala el día del even
 7. [ ] El vúmetro se mueve cuando hay sonido. _(planificado)_
 8. [ ] Configuré la pantalla para que no se bloquee. _(planificado)_
 9. [ ] Sé cómo pausar en los recesos y finalizar al terminar. _(planificado)_
-10. [ ] Al terminar, revisé el recap y avisé si hubo problemas. _(planificado)_
+10. [ ] Al terminar, revisé el recap y avisé si hubo problemas (si falló, usé **Generar recap** en la estación).
