@@ -13,11 +13,39 @@ type Props = {
   fontClass: string
   highContrast: boolean
   ended: boolean
+  query?: string
+  focusSeq?: number | null
+}
+
+function Highlight({ text, query }: { text: string; query?: string }) {
+  const needle = query?.trim()
+  if (!needle) return text
+  const escaped = needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  return text.split(new RegExp(`(${escaped})`, 'gi')).map((part, i) =>
+    i % 2 === 1 ? (
+      <mark key={i} className="rounded-sm bg-primary px-0.5 text-primary-foreground">
+        {part}
+      </mark>
+    ) : (
+      part
+    ),
+  )
 }
 
 // The transcript is drawn as a subway line: each caption is a station on the room's colored rail.
-export function CaptionRail({ lines, lang, sourceLang, interim, line, fontClass, highContrast, ended }: Props) {
-  const lastIndex = interim ? -1 : lines.length - 1
+export function CaptionRail({
+  lines,
+  lang,
+  sourceLang,
+  interim,
+  line,
+  fontClass,
+  highContrast,
+  ended,
+  query,
+  focusSeq,
+}: Props) {
+  const lastIndex = interim || query ? -1 : lines.length - 1
 
   return (
     <section aria-label={t.viewer.captions}>
@@ -25,10 +53,17 @@ export function CaptionRail({ lines, lang, sourceLang, interim, line, fontClass,
         {lines.map((l, index) => {
           const translated = l.lang === lang ? l.text : l.translations[lang]
           const isCurrent = index === lastIndex
-          const isRecent = index >= lines.length - 3
+          const isRecent = !query && (ended ? l.seq === focusSeq : index >= lines.length - 3)
 
           return (
-            <li key={l.seq} className="relative pl-6">
+            <li
+              key={l.seq}
+              id={`seg-${l.seq}`}
+              className={cn(
+                'relative scroll-mt-24 rounded-r-md pl-6 transition-colors',
+                l.seq === focusSeq && 'bg-secondary py-2',
+              )}
+            >
               <span
                 aria-hidden="true"
                 className={cn(
@@ -53,12 +88,12 @@ export function CaptionRail({ lines, lang, sourceLang, interim, line, fontClass,
                       : 'text-muted-foreground',
                   )}
                 >
-                  {translated}
+                  <Highlight text={translated} query={query} />
                 </p>
               ) : (
                 <div className="flex flex-col gap-1">
                   <p lang={l.lang} className={cn('text-pretty leading-snug text-muted-foreground', fontClass)}>
-                    {l.text}
+                    <Highlight text={l.text} query={query} />
                   </p>
                   <p className="font-display text-xs uppercase tracking-wider text-muted-foreground">
                     {index >= lines.length - 2 && !ended ? t.viewer.translating : t.viewer.originalOnly}
@@ -84,7 +119,7 @@ export function CaptionRail({ lines, lang, sourceLang, interim, line, fontClass,
           </li>
         )}
 
-        {ended && (
+        {ended && !query && (
           <li className="relative pl-6">
             <span
               aria-hidden="true"

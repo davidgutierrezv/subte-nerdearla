@@ -1,4 +1,6 @@
-import type { Lang, SessionStatus } from '@/lib/schemas'
+import type { InsightPayload, Lang, SessionStatus } from '@/lib/schemas'
+
+export type Recap = Partial<Record<Lang, InsightPayload>>
 
 export const LIVE_EVENT = 'live'
 

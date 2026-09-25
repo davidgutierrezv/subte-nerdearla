@@ -1,7 +1,6 @@
 import { generateText } from 'ai'
 import type { Lang } from '@/lib/schemas'
-
-const TRANSLATION_MODEL = 'google/gemini-3.5-flash-lite'
+import { FAST_MODEL as TRANSLATION_MODEL, gateway } from './gateway'
 
 const LANGUAGE_NAME: Record<Lang, string> = {
   en: 'English',
@@ -25,7 +24,7 @@ export async function translateSegment({ text, from, to, context, glossary }: Tr
     : ''
 
   const { text: output } = await generateText({
-    model: TRANSLATION_MODEL,
+    model: gateway(TRANSLATION_MODEL),
     instructions: [
       `You translate live conference captions from ${LANGUAGE_NAME[from]} to ${LANGUAGE_NAME[to]}.`,
       'The input is speech-to-text output and may be an incomplete sentence: translate it as-is, do not complete or summarize it.',
