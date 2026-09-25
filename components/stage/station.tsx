@@ -62,6 +62,17 @@ export function Station({ session, initialNextSeq }: Props) {
     return () => clearInterval(id)
   }, [running])
 
+  useEffect(() => {
+    if (!running) return
+    const reacquire = async () => {
+      if (document.visibilityState !== 'visible') return
+      const nav = navigator as Navigator & { wakeLock?: { request: (type: 'screen') => Promise<{ release: () => Promise<void> }> } }
+      wakeLockRef.current = (await nav.wakeLock?.request('screen').catch(() => null)) ?? null
+    }
+    document.addEventListener('visibilitychange', reacquire)
+    return () => document.removeEventListener('visibilitychange', reacquire)
+  }, [running])
+
   useEffect(() => () => stopAll(), [])
 
   function clock() {
