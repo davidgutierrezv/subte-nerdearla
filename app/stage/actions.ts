@@ -1,9 +1,11 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { after } from 'next/server'
 import { z } from 'zod'
 import { broadcast } from '@/lib/live/broadcast'
 import { ingestSegment } from '@/lib/live/ingest'
+import { generateRecap } from '@/lib/live/recap'
 import { logEvent } from '@/lib/log'
 import { hasOperatorSession } from '@/lib/operator'
 import { type ApiResult, type Lang, InterimEventSchema, SegmentInSchema } from '@/lib/schemas'
@@ -41,7 +43,17 @@ export async function endSessionAction(sessionId: string): Promise<ApiResult<nul
 
   await broadcast(id, { type: 'status', status: 'ended' }).catch(() => {})
   revalidatePath('/')
+  // The recap takes several seconds; viewers get an `insight` event when it lands.
+  after(() => generateRecap(id).catch((err) => logEvent('recap', 'error', 'recap crashed', { sessionId: id, err: String(err) })))
   return { ok: true, data: null }
+}
+
+export async function generateRecapAction(sessionId: string): Promise<ApiResult<{ langs: Lang[] }>> {
+  if (!(await hasOperatorSession())) return unauthorized
+  const id = SessionIdSchema.parse(sessionId)
+  const result = await generateRecap(id)
+  if (!result.ok) return { ok: false, error: { code: result.code, message: result.code } }
+  return { ok: true, data: { langs: result.langs } }
 }
 
 export async function resetSessionAction(sessionId: string): Promise<ApiResult<null>> {

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { getRecap } from '@/lib/live/recap-read'
 import { getSnapshot, getSessionView } from '@/lib/live/transcript'
 import { LangSchema } from '@/lib/schemas'
 import { LiveViewer } from '@/components/viewer/live-viewer'
@@ -22,6 +23,7 @@ export default async function SessionPage({ params, searchParams }: PageProps<'/
   if (!snapshot) notFound()
 
   const { session, stageName, lineIndex, status, lines } = snapshot
+  const initialRecap = status === 'ended' ? await getRecap(session.id) : {}
   const requested = LangSchema.safeParse(query.lang)
   const available = [session.source_lang, ...session.target_langs]
   const initialLang =
@@ -34,6 +36,7 @@ export default async function SessionPage({ params, searchParams }: PageProps<'/
       lineIndex={lineIndex}
       initialLang={initialLang}
       initial={{ status, lines }}
+      initialRecap={initialRecap}
     />
   )
 }

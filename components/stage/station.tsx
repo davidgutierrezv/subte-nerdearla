@@ -2,8 +2,11 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import Link from 'next/link'
-import { Check, Copy, ExternalLink, Mic, Pause, Play, Radio, Square, Trash2 } from 'lucide-react'
-import { endSessionAction, pushInterimAction, pushSegmentAction, resetSessionAction, startSessionAction } from '@/app/stage/actions'
+import { Check, Copy, ExternalLink, Mic, Pause, Play, Radio, Sparkles, Square, Trash2 } from 'lucide-react'
+import {
+  endSessionAction,
+  generateRecapAction,
+  pushInterimAction, pushSegmentAction, resetSessionAction, startSessionAction } from '@/app/stage/actions'
 import { t } from '@/lib/i18n'
 import { formatClock } from '@/lib/live/shared'
 import type { SessionRow, SessionStatus } from '@/lib/schemas'
@@ -219,6 +222,16 @@ export function Station({ session, initialNextSeq }: Props) {
     else setError(t.stage.unexpected)
   }
 
+  async function handleRecap() {
+    setBusy(true)
+    setError(null)
+    setNotice(null)
+    const res = await generateRecapAction(session.id).catch(() => null)
+    setBusy(false)
+    if (res?.ok) setNotice(t.stage.recapDone)
+    else setError(t.stage.recapFailed)
+  }
+
   async function handleReset() {
     if (!window.confirm(t.stage.resetConfirm)) return
     stopAll()
@@ -311,6 +324,21 @@ export function Station({ session, initialNextSeq }: Props) {
             {t.stage.finish}
           </button>
         </div>
+
+        {status === 'ended' && (
+          <div className="flex flex-col gap-2">
+            <button
+              type="button"
+              onClick={handleRecap}
+              disabled={busy}
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-4 font-display font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              <Sparkles className="size-5" aria-hidden="true" />
+              {busy ? t.stage.recapWorking : t.stage.recap}
+            </button>
+            <p className="text-sm leading-relaxed text-muted-foreground">{t.stage.recapHint}</p>
+          </div>
+        )}
 
         <div aria-live="polite" className="flex flex-col gap-1 text-sm">
           {running && (
