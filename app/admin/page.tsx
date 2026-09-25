@@ -10,7 +10,7 @@ import { SessionList } from '@/components/admin/session-list'
 import { logoutAction } from './actions'
 
 export const metadata: Metadata = {
-  title: 'Administración — StageCaptions',
+  title: 'Administración — Subte',
   robots: { index: false, follow: false },
 }
 

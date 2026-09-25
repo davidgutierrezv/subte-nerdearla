@@ -1,29 +1,29 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google'
+import { Atkinson_Hyperlegible, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 
-const _plexSans = IBM_Plex_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700'] })
-const _plexMono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500'] })
+const _atkinson = Atkinson_Hyperlegible({ subsets: ['latin'], weight: ['400', '700'] })
+const _spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['500', '600', '700'] })
 
 export const metadata: Metadata = {
-  title: 'StageCaptions — Subtítulos en vivo',
+  title: 'Subte — Cada charla, en tu idioma, en vivo',
   description:
-    'Subtítulos en vivo y traducción inglés ↔ español para cada sala de la conferencia, desde tu celular.',
+    'Subtítulos en vivo y traducción inglés ↔ español para cada sala de Nerdearla, desde tu celular.',
   generator: 'v0.app',
   icons: {
-    icon: [
-      { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
-      { url: '/icon-dark-32x32.png', media: '(prefers-color-scheme: dark)' },
-      { url: '/icon.svg', type: 'image/svg+xml' },
-    ],
-    apple: '/apple-icon.png',
+    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
+  },
+  openGraph: {
+    title: 'Subte',
+    description: 'Cada charla, en tu idioma, en vivo.',
+    images: ['/brand/subte-logo.png'],
   },
 }
 
 export const viewport: Viewport = {
   colorScheme: 'dark',
-  themeColor: '#16181c',
+  themeColor: '#0b0b0d',
   width: 'device-width',
   initialScale: 1,
 }

@@ -3,12 +3,13 @@ import type { Dictionary } from './es'
 type Widen<T> = { [K in keyof T]: T[K] extends string ? string : Widen<T[K]> }
 
 export const en: Widen<Dictionary> = {
-  appName: 'StageCaptions',
+  appName: 'Subte',
   langName: { es: 'Español', en: 'English' },
   status: { scheduled: 'Up next', live: 'Live', ended: 'Ended' },
   agenda: {
-    eyebrow: 'Live captions',
-    title: 'Pick a room and read the talk in your language',
+    eyebrow: 'Hop on any talk',
+    title: 'Every talk, in your language, live.',
+    line: 'Line',
     subtitle: 'Original-language transcript plus English ↔ Spanish translation, on your phone.',
     speaksIn: 'Spoken in',
     readIn: 'Read in',

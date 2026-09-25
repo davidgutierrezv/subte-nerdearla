@@ -1,10 +1,11 @@
 export const es = {
-  appName: 'StageCaptions',
+  appName: 'Subte',
   langName: { es: 'Español', en: 'English' },
   status: { scheduled: 'Próxima', live: 'En vivo', ended: 'Finalizada' },
   agenda: {
-    eyebrow: 'Subtítulos en vivo',
-    title: 'Elegí una sala y leé la charla en tu idioma',
+    eyebrow: 'Subite a cualquier charla',
+    title: 'Cada charla, en tu idioma, en vivo.',
+    line: 'Línea',
     subtitle: 'Transcripción en el idioma original y traducción inglés ↔ español, en tu celular.',
     speaksIn: 'Habla en',
     readIn: 'Leer en',
