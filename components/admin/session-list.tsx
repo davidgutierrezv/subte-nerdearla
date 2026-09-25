@@ -33,9 +33,15 @@ export function SessionList({ stages }: { stages: StageWithSessions[] }) {
                         <StatusBadge status={s.status} />
                         <Link
                           href={`/s/${s.slug}?lang=es`}
-                          className="text-sm text-primary underline-offset-4 hover:underline"
+                          className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
                         >
                           {t.admin.open}
+                        </Link>
+                        <Link
+                          href={`/stage/${s.slug}`}
+                          className="inline-flex min-h-9 items-center rounded-md bg-primary px-3 font-display text-sm font-semibold text-primary-foreground hover:bg-primary/90"
+                        >
+                          {t.admin.operate}
                         </Link>
                       </div>
                     </li>
