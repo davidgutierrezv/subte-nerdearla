@@ -224,7 +224,7 @@ Guía completa: [docs/DEPLOY.md](docs/DEPLOY.md). Operación durante el evento: 
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Pública | Clave anónima; el acceso está limitado por RLS |
 | `SUPABASE_SERVICE_ROLE_KEY` | **Secreta** | Escrituras del servidor y publicación en Realtime. Nunca se envía al navegador |
 | `OPERATOR_KEY` | **Secreta** | Clave compartida de operadores. Generala con `openssl rand -base64 32` |
-| `AI_GATEWAY_API_KEY` | **Secreta, opcional** | Solo fuera de Vercel. En Vercel, AI Gateway se autentica solo con OIDC |
+| `VERCEL_AI_GATEWAY_KEY` | **Secreta, opcional** | API key de AI Gateway. Si no está, se usa `AI_GATEWAY_API_KEY` u OIDC |
 
 ## Estructura del repositorio
 

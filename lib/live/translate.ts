@@ -1,7 +1,13 @@
-import { generateText } from 'ai'
+import { createGateway, generateText } from 'ai'
 import type { Lang } from '@/lib/schemas'
 
-const TRANSLATION_MODEL = 'google/gemini-3.5-flash-lite'
+// Free-tier Gateway accounts can't use newer Gemini models; 2.5 Flash Lite is available and ~500ms.
+const TRANSLATION_MODEL = 'google/gemini-2.5-flash-lite'
+
+// Without an explicit key the gateway falls back to AI_GATEWAY_API_KEY / OIDC.
+const gateway = createGateway(
+  process.env.VERCEL_AI_GATEWAY_KEY ? { apiKey: process.env.VERCEL_AI_GATEWAY_KEY } : {},
+)
 
 const LANGUAGE_NAME: Record<Lang, string> = {
   en: 'English',
@@ -25,7 +31,7 @@ export async function translateSegment({ text, from, to, context, glossary }: Tr
     : ''
 
   const { text: output } = await generateText({
-    model: TRANSLATION_MODEL,
+    model: gateway(TRANSLATION_MODEL),
     instructions: [
       `You translate live conference captions from ${LANGUAGE_NAME[from]} to ${LANGUAGE_NAME[to]}.`,
       'The input is speech-to-text output and may be an incomplete sentence: translate it as-is, do not complete or summarize it.',
