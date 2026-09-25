@@ -107,8 +107,22 @@ export const en: Widen<Dictionary> = {
     simDone: 'Simulation finished. You can broadcast again.',
     keepAwake: 'Do not lock the screen or switch apps while broadcasting.',
     translated: 'translated',
+    untranslated: 'not translated',
     pending: 'sending',
     error: 'error',
     unexpected: 'The action could not be completed.',
+  },
+  demo: {
+    title: 'Demo mode: every room live',
+    hint: 'Puts every session live at once with sample talks. Great for showing a busy agenda.',
+    start: 'Put all live',
+    starting: 'Starting rooms…',
+    stop: 'Stop demo',
+    keepOpen: 'Keep this tab open: it is the one broadcasting the talks.',
+    waiting: 'starting',
+    translatedShort: 'translated',
+    noTranslation:
+      'Captions arrive but translation is not responding. Check that AI Gateway is enabled on the Vercel account.',
+    error: 'Could not start the rooms.',
   },
 }

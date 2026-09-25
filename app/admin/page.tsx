@@ -7,6 +7,7 @@ import { LoginForm } from '@/components/admin/login-form'
 import { StageForm } from '@/components/admin/stage-form'
 import { SessionForm } from '@/components/admin/session-form'
 import { SessionList } from '@/components/admin/session-list'
+import { LiveDemo } from '@/components/admin/live-demo'
 import { logoutAction } from './actions'
 
 export const metadata: Metadata = {
@@ -65,6 +66,7 @@ async function AdminDashboard() {
 
   return (
     <div className="flex flex-col gap-8">
+      <LiveDemo />
       <section aria-labelledby="try-heading" className="rounded-lg bg-card p-4 ring-1 ring-border">
         <h2 id="try-heading" className="font-display text-sm font-semibold">
           {t.admin.tryTitle}

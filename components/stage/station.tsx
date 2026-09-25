@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 import { StatusBadge } from '@/components/agenda/status-badge'
 
 type Source = 'sim' | 'mic'
-type SentLine = { seq: number; text: string; state: 'sending' | 'ok' | 'error'; ms?: number }
+type SentLine = { seq: number; text: string; state: 'sending' | 'ok' | 'untranslated' | 'error'; ms?: number }
 
 type Props = {
   session: SessionRow
@@ -80,6 +80,7 @@ export function Station({ session, initialNextSeq }: Props) {
 
     const t0 = performance.now()
     let ok = false
+    let translated = false
     for (let attempt = 0; attempt < MAX_ATTEMPTS && !ok; attempt++) {
       try {
         const res = await pushSegmentAction({
@@ -91,14 +92,16 @@ export function Station({ session, initialNextSeq }: Props) {
           tEndMs: Math.max(tEndMs, tStartMs),
         })
         ok = res.ok
+        translated = res.ok && res.data.translated.length > 0
       } catch {
         ok = false
       }
       if (!ok) await wait(500 * (attempt + 1))
     }
     const ms = Math.round(performance.now() - t0)
+    const state: SentLine['state'] = !ok ? 'error' : translated ? 'ok' : 'untranslated'
 
-    setSent((prev) => prev.map((l) => (l.seq === seq ? { ...l, state: ok ? 'ok' : 'error', ms } : l)))
+    setSent((prev) => prev.map((l) => (l.seq === seq ? { ...l, state, ms } : l)))
     setStats((s) => (ok ? { ...s, ok: s.ok + 1, lastMs: ms } : { ...s, failed: s.failed + 1 }))
   }
 
@@ -372,12 +375,15 @@ export function Station({ session, initialNextSeq }: Props) {
                     'shrink-0 pt-0.5 font-display text-xs',
                     line.state === 'ok' && 'text-line-d',
                     line.state === 'sending' && 'text-muted-foreground',
+                    line.state === 'untranslated' && 'text-line-a',
                     line.state === 'error' && 'text-destructive',
                   )}
                 >
                   {line.state === 'ok'
                     ? `${t.stage.translated} ${((line.ms ?? 0) / 1000).toFixed(1)}s`
-                    : line.state === 'sending'
+                    : line.state === 'untranslated'
+                      ? t.stage.untranslated
+                      : line.state === 'sending'
                       ? t.stage.pending
                       : t.stage.error}
                 </span>

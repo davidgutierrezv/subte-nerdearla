@@ -103,9 +103,23 @@ export const es = {
     simDone: 'Fin de la simulación. Podés volver a transmitir.',
     keepAwake: 'No bloquees la pantalla ni cambies de app mientras transmitís.',
     translated: 'traducido',
+    untranslated: 'sin traducción',
     pending: 'enviando',
     error: 'error',
     unexpected: 'No se pudo completar la acción.',
+  },
+  demo: {
+    title: 'Modo demo: todas las salas en vivo',
+    hint: 'Pone todas las sesiones en vivo a la vez con charlas de ejemplo. Ideal para mostrar la agenda llena de movimiento.',
+    start: 'Poner todas en vivo',
+    starting: 'Encendiendo salas…',
+    stop: 'Detener demo',
+    keepOpen: 'Dejá esta pestaña abierta: es la que transmite las charlas.',
+    waiting: 'arrancando',
+    translatedShort: 'traducidos',
+    noTranslation:
+      'Los subtítulos llegan pero la traducción no responde. Revisá que AI Gateway esté habilitado en la cuenta de Vercel.',
+    error: 'No se pudieron encender las salas.',
   },
 } as const
 
